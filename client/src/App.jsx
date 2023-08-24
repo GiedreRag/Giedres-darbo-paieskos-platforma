@@ -3,6 +3,7 @@ import { ContextWrapper } from "./context/GlobalContext";
 import { PublicLayout } from './layout/PublicLayout';
 import { Page404 } from './pages/Page404';
 import { Home } from './pages/Home';
+import { Register } from './pages/Register';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route Component={PublicLayout}>
             <Route index path='/' element={<Home />}></Route>
+            <Route path='/registracija' element={<Register />}></Route>
           </Route>
           <Route Component={PublicLayout}>
             <Route path='*' element={<Page404 />}></Route>
