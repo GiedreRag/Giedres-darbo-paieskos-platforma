@@ -8,6 +8,7 @@ async function dbSetup() {
         password: DB_PASS,
     });
 
+    // await connection.execute(`DROP DATABASE IF EXISTS \`${DB_DATABASE}\``);
     await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\``);
     connection.query(`USE \`${DB_DATABASE}\``);
 
