@@ -8,7 +8,7 @@ async function dbSetup() {
         password: DB_PASS,
     });
 
-    // await connection.execute(`DROP DATABASE IF EXISTS \`${DB_DATABASE}\``);
+    await connection.execute(`DROP DATABASE IF EXISTS \`${DB_DATABASE}\``);
     await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\``);
     connection.query(`USE \`${DB_DATABASE}\``);
 
@@ -23,7 +23,7 @@ async function usersTable(db) {
                         id int(10) NOT NULL AUTO_INCREMENT,
                         fullname varchar(60) NOT NULL,
                         email varchar(60) NOT NULL,
-                        password_hash varchar(100) NOT NULL,
+                        password_hash varchar(200) NOT NULL,
                         isBlocked tinyint(1) NOT NULL DEFAULT 0,
                         createdAt timestamp NOT NULL DEFAULT current_timestamp(),
                         PRIMARY KEY (id)

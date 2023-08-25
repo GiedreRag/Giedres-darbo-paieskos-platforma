@@ -53,14 +53,14 @@ export function Register() {
         const minFullnameSize = 5;
         const maxFullnameSize = 60;
 
-        if (fullname.length < minFullnameSize) {
+        if (!isValidFullnameFormat(fullname)) {
+        setFullnameErr(`Pilnas vardas turi susideti is dvieju ar triju zodziu, kuriu kiekvienas prasideda didziaja raide. Galima naudoti tik raides.`);
+        setFullnameValid(false);
+        } else if (fullname.length < minFullnameSize) {
             setFullnameErr(`Privaloma maziausiai ${minFullnameSize} simboliai.`);
             setFullnameValid(false);
         } else if (fullname.length > maxFullnameSize) {
             setFullnameErr(`Leidziama daugiausiai ${maxFullnameSize} simboliu.`);
-            setFullnameValid(false);
-        } else if (!isValidFullnameFormat(fullname)) {
-            setFullnameErr(`Pilnas vardas turi susideti is dvieju ar triju zodziu, kuriu kiekvienas prasideda didziaja raide. Galima naudoti tik raides.`);
             setFullnameValid(false);
         } else {
             setFullnameErr(false);
@@ -88,8 +88,8 @@ export function Register() {
         } else if (atSymbolCount > 1) {
             setEmailErr(`Leidziamas tik 1 "@" simbolis.`);
             setEmailValid(false);
-        } else if (atSymbol > dotSymbol || dotSymbol === -1) {
-            setEmailErr(`Netinkamas email formatas: privalo turet "@", kuris eina pries taska.`);
+        } else if (atSymbol > dotSymbol - 3 || dotSymbol === -1) {
+            setEmailErr(`Netinkamas email formatas, pavyzdys: example@example.com`);
             setEmailValid(false);
         } else if (topLevelDomain.length < 2 || topLevelDomain.length > 4) {
             setEmailErr(`Netinkamas top-level domain.`);
