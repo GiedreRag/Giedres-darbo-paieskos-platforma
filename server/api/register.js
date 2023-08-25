@@ -1,5 +1,6 @@
 import express from 'express';
 import { connection } from '../dbSetup.js';
+import { hash } from '../lib/hash.js';
 
 export const register = express.Router();
 
@@ -24,7 +25,7 @@ register.post('/', async (req, res) => {
         }
 
         const insertQuery = `INSERT INTO users (fullname, email, password_hash) VALUES (?, ?, ?)`;
-        const insertRes = await connection.execute(insertQuery, [fullname, email, password]);
+        const insertRes = await connection.execute(insertQuery, [fullname, email, hash(password)]);
         const insertResObject = insertRes[0];
 
         if (insertResObject.insertId > 0) {
@@ -46,6 +47,6 @@ register.post('/', async (req, res) => {
     }
 });
 
-register.use((req, res, next) => {
+register.use((_req, res, _next) => {
     return res.status(404).json({ msg: 'Unsupported "Register" method' });
 });

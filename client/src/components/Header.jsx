@@ -16,8 +16,8 @@ export function Header() {
                 </ul>
 
                 <div className="col-md-3 text-end">
-                    <Link to="/" className="btn btn-outline-primary me-2">Prisijunkti</Link>
-                    <Link to="/" className="btn btn-primary">Registruotis</Link>
+                    <Link to="/prisijungimas" className="btn btn-outline-primary me-2">Prisijunkti</Link>
+                    <Link to="/registracija" className="btn btn-primary">Registruotis</Link>
                 </div>
             </header>
         </div>
