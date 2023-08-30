@@ -2,6 +2,8 @@ import mysql from 'mysql2/promise';
 import { DB_DATABASE, DB_HOST, DB_PASS, DB_USER } from './env.js';
 import { hash } from './lib/hash.js';
 
+const database_reset = false;
+
 async function dbSetup() {
     let connection = await mysql.createConnection({
         host: DB_HOST,
@@ -9,7 +11,9 @@ async function dbSetup() {
         password: DB_PASS,
     });
 
-    await connection.execute(`DROP DATABASE IF EXISTS \`${DB_DATABASE}\``);
+    if (database_reset) {
+        await connection.execute(`DROP DATABASE IF EXISTS \`${DB_DATABASE}\``);
+    }
     await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\``);
     connection.query(`USE \`${DB_DATABASE}\``);
 
@@ -17,8 +21,10 @@ async function dbSetup() {
     await usersTable(connection);
     await tokensTable(connection);
 
-    await generateRoles(connection);
-    await generateUsers(connection);
+    if (database_reset) {
+        await generateRoles(connection);
+        await generateUsers(connection);
+    }
 
     return connection;
 }
@@ -31,12 +37,12 @@ async function usersTable(db) {
             email varchar(60) NOT NULL,
             password_hash varchar(200) NOT NULL,
             role_id int(10) NOT NULL DEFAULT 2,
-            isBlocked tinyint(1) NOT NULL DEFAULT 0,
+            is_Blocked tinyint(1) NOT NULL DEFAULT 0,
             createdAt timestamp NOT NULL DEFAULT current_timestamp(),
             PRIMARY KEY (id),
             KEY role_id (role_id),
             CONSTRAINT users_ibfk_1 FOREIGN KEY (role_id) REFERENCES roles (id)
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci
+          ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci
           `;
         await db.execute(sql);
     } catch (error) {
