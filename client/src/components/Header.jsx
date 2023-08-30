@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../context/GlobalContext";
 
 export function Header() {
-    const { loginStatus, updateFullname, updateEmail, updateLoginStatus, updateRole} = useContext(GlobalContext);
+    const { role, updateFullname, updateEmail, updateLoginStatus, updateRole} = useContext(GlobalContext);
     const navigate = useNavigate();
 
     function logOut () {
@@ -29,10 +29,24 @@ export function Header() {
             <Link to="/registracija" className="btn btn-primary">Registruotis</Link>
     </>; 
 
-    const authLinks = <>
+    const adminLinks = <>
             <Link to="/paskyra" className="btn btn-outline-primary me-2">Paskyra</Link>
             <Link onClick={logOut} className="btn btn-primary">Atsijungti</Link>
     </>;
+
+    const sellerLinks = <>
+            <Link to="/paskyra" className="btn btn-outline-primary me-2">Paskyra</Link>
+            <Link onClick={logOut} className="btn btn-primary">Atsijungti</Link>
+    </>;
+
+    let extralinks = <></>;
+    if (role === 'admin') {
+        extralinks = adminLinks;
+    } else if (role === 'seller') {
+        extralinks = sellerLinks;
+    } else {
+        extralinks = publicLinks;
+    }
 
     return (
         <div className="container">
@@ -49,7 +63,7 @@ export function Header() {
                 </ul>
 
                 <div className="col-md-4 text-end">
-                    { loginStatus ? authLinks : publicLinks }
+                    {extralinks}
                 </div>
             </header>
         </div>
