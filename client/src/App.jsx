@@ -4,6 +4,9 @@ import { PublicLayout } from './layout/PublicLayout';
 import { Page404 } from './pages/Page404';
 import { Home } from './pages/Home';
 import { Register } from './pages/Register';
+import { Login } from './pages/Login';
+import { Account } from './pages/Account';
+import { UserLayout } from './layout/UserLayout';
 
 
 function App() {
@@ -14,6 +17,10 @@ function App() {
           <Route Component={PublicLayout}>
             <Route index path='/' element={<Home />}></Route>
             <Route path='/registracija' element={<Register />}></Route>
+            <Route path='/prisijungimas' element={<Login />}></Route>
+          </Route>
+          <Route Component={UserLayout}>
+            <Route path='/paskyra' element={<Account />}></Route>
           </Route>
           <Route Component={PublicLayout}>
             <Route path='*' element={<Page404 />}></Route>
