@@ -53,14 +53,14 @@ export function Register() {
         const minFullnameSize = 5;
         const maxFullnameSize = 60;
 
-        if (fullname.length < minFullnameSize) {
+        if (!isValidFullnameFormat(fullname)) {
+        setFullnameErr(`Pilnas vardas turi susideti is dvieju ar triju zodziu, kuriu kiekvienas prasideda didziaja raide. Galima naudoti tik raides.`);
+        setFullnameValid(false);
+        } else if (fullname.length < minFullnameSize) {
             setFullnameErr(`Privaloma maziausiai ${minFullnameSize} simboliai.`);
             setFullnameValid(false);
         } else if (fullname.length > maxFullnameSize) {
             setFullnameErr(`Leidziama daugiausiai ${maxFullnameSize} simboliu.`);
-            setFullnameValid(false);
-        } else if (!isValidFullnameFormat(fullname)) {
-            setFullnameErr(`Pilnas vardas turi susideti is dvieju ar triju zodziu, kuriu kiekvienas prasideda didziaja raide. Galima naudoti tik raides.`);
             setFullnameValid(false);
         } else {
             setFullnameErr(false);
@@ -88,8 +88,8 @@ export function Register() {
         } else if (atSymbolCount > 1) {
             setEmailErr(`Leidziamas tik 1 "@" simbolis.`);
             setEmailValid(false);
-        } else if (atSymbol > dotSymbol || dotSymbol === -1) {
-            setEmailErr(`Netinkamas email formatas: privalo turet "@", kuris eina pries taska.`);
+        } else if (atSymbol > dotSymbol - 3 || dotSymbol === -1) {
+            setEmailErr(`Netinkamas email formatas, pavyzdys: example@example.com`);
             setEmailValid(false);
         } else if (topLevelDomain.length < 2 || topLevelDomain.length > 4) {
             setEmailErr(`Netinkamas top-level domain.`);
@@ -116,7 +116,7 @@ export function Register() {
         }
     }
 
-    function isValidRepeatPassword() {
+    function isValidRepassword() {
         if (password !== repassword) {
             setRepasswordErr('Slaptazodziai nesutampa.');
             setRepasswordValid(false);
@@ -169,25 +169,25 @@ export function Register() {
             <div className="row">
                 <form onSubmit={submitHandler} className="col-10 col-sm-8 col-md-6 col-lg-4 m-auto mt-3">
                     <div className="form-floating mb-4">
-                        <input onChange={updateFullname} onBlur={isValidFullname} value={fullname} type="text" id="username"
+                        <input onChange={updateFullname} onBlur={isValidFullname} autoComplete="On" value={fullname} type="text" id="fullname"
                             className={`form-control ${fullnameErr ? 'is-invalid' : ''} ${fullnameValid ? 'is-valid' : ''}`} />
                         <label htmlFor="fullname">Pilnas vardas</label>
                         <div className="invalid-feedback">{fullnameErr}</div>
                     </div>
                     <div className="form-floating mb-4">
-                        <input onChange={updateEmail} onBlur={isValidEmail} value={email} type="email" id="email"
+                        <input onChange={updateEmail} onBlur={isValidEmail} autoComplete="On" value={email} type="email" id="email"
                             className={`form-control ${emailErr ? 'is-invalid' : ''} ${emailValid ? 'is-valid' : ''}`} />
                         <label htmlFor="email">Elektroninis pastas</label>
                         <div className="invalid-feedback">{emailErr}</div>
                     </div>
                     <div className="form-floating mb-4">
-                        <input onChange={updatePassword} onBlur={isValidPassword} value={password} type="password" id="password"
+                        <input onChange={updatePassword} onBlur={isValidPassword} autoComplete="Off" value={password} type="password" id="password"
                             className={`form-control ${passwordErr ? 'is-invalid' : ''} ${passwordValid ? 'is-valid' : ''}`} />
                         <label htmlFor="password">Slaptazodis</label>
                         <div className="invalid-feedback">{passwordErr}</div>
                     </div>
                     <div className="form-floating mb-4">
-                        <input onChange={updateRepassword} onBlur={isValidRepeatPassword} value={repassword} type="password" id="repeatpassword"
+                        <input onChange={updateRepassword} onBlur={isValidRepassword} autoComplete="Off" value={repassword} type="password" id="repassword"
                         className={`form-control ${repasswordErr ? 'is-invalid' : ''} ${repasswordValid ? 'is-valid' : ''}`} />
                         <label htmlFor="repeatpassword">Pakartot slaptazodi</label>
                         <div className="invalid-feedback">{repasswordErr}</div>
