@@ -1,6 +1,39 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { GlobalContext } from "../context/GlobalContext";
 
 export function Header() {
+    const { loginStatus, updateFullname, updateEmail, updateLoginStatus, updateRole} = useContext(GlobalContext);
+    const navigate = useNavigate();
+
+    function logOut () {
+        fetch('http://localhost:3001/api/logout', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then(() => {
+                updateLoginStatus(false);
+                updateEmail('');
+                updateFullname('');
+                updateRole('public');
+                navigate('/prisijungimas');
+            })
+            .catch(console.error);
+    }
+
+    const publicLinks = <>
+            <Link to="/prisijungimas" className="btn btn-outline-primary me-2">Prisijungti</Link>
+            <Link to="/registracija" className="btn btn-primary">Registruotis</Link>
+    </>; 
+
+    const authLinks = <>
+            <Link to="/paskyra" className="btn btn-outline-primary me-2">Paskyra</Link>
+            <Link onClick={logOut} className="btn btn-primary">Atsijungti</Link>
+    </>;
+
     return (
         <div className="container">
             <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
@@ -15,9 +48,8 @@ export function Header() {
                     <li><Link to="/" className="nav-link px-2">Visi darbo pasiulymai</Link></li>
                 </ul>
 
-                <div className="col-md-3 text-end">
-                    <Link to="/prisijungimas" className="btn btn-outline-primary me-2">Prisijunkti</Link>
-                    <Link to="/registracija" className="btn btn-primary">Registruotis</Link>
+                <div className="col-md-4 text-end">
+                    { loginStatus ? authLinks : publicLinks }
                 </div>
             </header>
         </div>
