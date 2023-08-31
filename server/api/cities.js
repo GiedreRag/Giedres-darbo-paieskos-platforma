@@ -71,6 +71,32 @@ cities.get('/', async (_req, res) => {
     }
 });
 
+cities.delete('/:title', async (req, res) => {
+    const { title } = req.params;
+    try {
+        const deleteQuery = `DELETE FROM cities WHERE title = ?;`;
+        const deleteRes = await connection.execute(deleteQuery, [title]);
+        const cities = deleteRes[0];
+
+        if (cities.affectedRows > 0) {
+            return res.status(200).json({
+                status: 'ok',
+                msg: 'City deleted',
+            });
+        } else {
+            return res.status(400).json({
+                status: 'err',
+                msg: 'City not found, nothing deleted',
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            status: 'err',
+            msg: 'DELETE: CITIES API - server error.',
+        });
+    }
+});
+
 cities.use((_req, res, _next) => {
     return res.status(404).json({ msg: 'Unsupported "Cities" method' });
 });

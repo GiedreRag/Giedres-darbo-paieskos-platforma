@@ -3,7 +3,25 @@ import { GlobalContext } from "../context/GlobalContext";
 import { useContext } from "react";
 
 export function CitiesTable() {
-    const { cities } = useContext(GlobalContext); 
+    const { cities, deleteCity } = useContext(GlobalContext); 
+
+    function deleteCityHandler(title) {
+        fetch('http://localhost:3001/api/cities/' + title, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    deleteCity(title);
+                }
+            })
+            .catch();
+
+    }
     return (
         <div className="container" >
             <table className="table">
@@ -22,7 +40,7 @@ export function CitiesTable() {
                                 <td>{city}</td>
                                 <td>
                                     <Link className="me-2" to={`/koreguoti-forma/miestu-sarasas/${city}/koreguoti`}>Koreguoti</Link>
-                                    <button type='button'>Pasalinti</button>
+                                    <button onClick={() => deleteCityHandler(city)} type='button'>Pasalinti</button>
                                 </td>
                             </tr>
                         ))
