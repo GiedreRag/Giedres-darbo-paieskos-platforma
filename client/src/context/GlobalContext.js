@@ -11,6 +11,8 @@ export const initialContext = {
     updateEmail: () => { },
     cities: [],
     addCity: () => { },
+    updateCity: () => { },
+    deleteCity: () => { },
 };
 
 export const GlobalContext = createContext(initialContext);
@@ -79,12 +81,16 @@ export const ContextWrapper = (props) => {
         setEmail(email);
     }
 
+    function addCity(city) {
+        setCities(pre => [...pre, city]);
+    }
+
     function updateCity(cities) {
         setCities(cities);
     }
 
-    function addCity(city) {
-        setCities(pre => [...pre, city]);
+    function deleteCity(city) {
+        setCities(pre => pre.filter(title => title !== city));
     }
 
     const value = {
@@ -99,6 +105,7 @@ export const ContextWrapper = (props) => {
         cities,
         addCity,
         updateCity,
+        deleteCity,
     };
 
     return (
