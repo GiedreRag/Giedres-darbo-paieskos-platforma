@@ -9,6 +9,8 @@ export const initialContext = {
     updateFullname: () => { },
     email: '',
     updateEmail: () => { },
+    cities: [],
+    addCity: () => { },
 };
 
 export const GlobalContext = createContext(initialContext);
@@ -18,6 +20,7 @@ export const ContextWrapper = (props) => {
     const [role, setRole] = useState(initialContext.role);
     const [fullname, setFullname] = useState(initialContext.fullname);
     const [email, setEmail] = useState(initialContext.email);
+    const [cities, setCities] = useState(initialContext.cities);
 
     useEffect(() => {
         fetch('http://localhost:3001/api/login', {
@@ -35,6 +38,23 @@ export const ContextWrapper = (props) => {
                     setRole(data.user.role);
                     setFullname(data.user.fullname);
                     setEmail(data.user.email);
+                }
+            })
+            .catch(console.error);
+    }, []);
+
+    useEffect(() => {
+        fetch('http://localhost:3001/api/cities', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok' && data.list) {
+                    setCities(data.list.map(city => city.title));
                 }
             })
             .catch(console.error);
@@ -59,6 +79,14 @@ export const ContextWrapper = (props) => {
         setEmail(email);
     }
 
+    function updateCity(cities) {
+        setCities(cities);
+    }
+
+    function addCity(city) {
+        setCities(pre => [...pre, city]);
+    }
+
     const value = {
         loginStatus,
         updateLoginStatus,
@@ -68,6 +96,9 @@ export const ContextWrapper = (props) => {
         updateFullname,
         email,
         updateEmail,
+        cities,
+        addCity,
+        updateCity,
     };
 
     return (

@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../context/GlobalContext";
+import { useContext } from "react";
 
 export function CitiesTable() {
+    const { cities } = useContext(GlobalContext); 
     return (
         <div className="container" >
-            <table class="table">
+            <table className="table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -12,22 +15,18 @@ export function CitiesTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Vilnius</td>
-                        <td>
-                            <Link className="me-2" to='/koreguoti-forma/miestu-sarasas/vilnius'>Koreguoti</Link>
-                            <button type='button'>Pasalinti</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Kaunas</td>
-                        <td>
-                            <Link className="me-2" to='/koreguoti-forma/miestu-sarasas/vilnius'>Koreguoti</Link>
-                            <button type='button'>Pasalinti</button>
-                        </td>
-                    </tr>
+                    {
+                        cities.map((city, idx) => (
+                            <tr key={city}>
+                                <td>{idx + 1}</td>
+                                <td>{city}</td>
+                                <td>
+                                    <Link className="me-2" to={`/koreguoti-forma/miestu-sarasas/${city}/koreguoti`}>Koreguoti</Link>
+                                    <button type='button'>Pasalinti</button>
+                                </td>
+                            </tr>
+                        ))
+                    }
                 </tbody>
             </table>
         </div>
