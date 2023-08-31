@@ -14,16 +14,19 @@ async function dbSetup() {
     if (database_reset) {
         await connection.execute(`DROP DATABASE IF EXISTS \`${DB_DATABASE}\``);
     }
+
     await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\``);
     connection.query(`USE \`${DB_DATABASE}\``);
 
-    await rolesTable(connection);
-    await usersTable(connection);
-    await tokensTable(connection);
-
     if (database_reset) {
+        await rolesTable(connection);
+        await usersTable(connection);
+        await tokensTable(connection);
+        await citiesTable(connection);
+
         await generateRoles(connection);
         await generateUsers(connection);
+        await generateCities(connection);
     }
 
     return connection;
@@ -31,19 +34,18 @@ async function dbSetup() {
 
 async function usersTable(db) {
     try {
-        const sql = `CREATE TABLE IF NOT EXISTS users (
-            id int(10) NOT NULL AUTO_INCREMENT,
-            fullname varchar(60) NOT NULL,
-            email varchar(60) NOT NULL,
-            password_hash varchar(200) NOT NULL,
-            role_id int(10) NOT NULL DEFAULT 2,
-            is_Blocked tinyint(1) NOT NULL DEFAULT 0,
-            createdAt timestamp NOT NULL DEFAULT current_timestamp(),
-            PRIMARY KEY (id),
-            KEY role_id (role_id),
-            CONSTRAINT users_ibfk_1 FOREIGN KEY (role_id) REFERENCES roles (id)
-          ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci
-          `;
+        const sql = `CREATE TABLE users (
+                        id int(10) NOT NULL AUTO_INCREMENT,
+                        fullname varchar(60) NOT NULL,
+                        email varchar(60) NOT NULL,
+                        password_hash varchar(200) NOT NULL,
+                        role_id int(10) NOT NULL DEFAULT 2,
+                        is_Blocked tinyint(1) NOT NULL DEFAULT 0,
+                        createdAt timestamp NOT NULL DEFAULT current_timestamp(),
+                        PRIMARY KEY (id),
+                        KEY role_id (role_id),
+                        CONSTRAINT users_ibfk_1 FOREIGN KEY (role_id) REFERENCES roles (id)
+                    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci`;
         await db.execute(sql);
     } catch (error) {
         console.log("Couldn't create users table.");
@@ -54,7 +56,7 @@ async function usersTable(db) {
 
 async function tokensTable(db) {
     try {
-        const sql = `CREATE TABLE IF NOT EXISTS tokens (
+        const sql = `CREATE TABLE tokens (
                         id int(10) NOT NULL AUTO_INCREMENT,
                         token varchar(40) NOT NULL,
                         user_id int(10) NOT NULL,
@@ -71,10 +73,9 @@ async function tokensTable(db) {
     }
 }
 
-
 async function rolesTable(db) {
     try {
-        const sql = `CREATE TABLE IF NOT EXISTS roles (
+        const sql = `CREATE TABLE roles (
                         id int(10) NOT NULL AUTO_INCREMENT,
                         role varchar(15) NOT NULL,
                         PRIMARY KEY (id)
@@ -87,12 +88,27 @@ async function rolesTable(db) {
     }
 }
 
+async function citiesTable(db) {
+    try {
+        const sql = `CREATE TABLE cities (
+                        id int(10) NOT NULL AUTO_INCREMENT,
+                        title varchar(30) NOT NULL,
+                        PRIMARY KEY (id)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`;
+        await db.execute(sql);
+    } catch (error) {
+        console.log("Couldn't create cities table.");
+        console.log(error);
+        throw error;
+    }
+}
+
 async function generateRoles(db) {
     try {
         const sql = `INSERT INTO roles (role) VALUES ('admin'), ('seller');`;
         await db.execute(sql);
     } catch (error) {
-        console.log("Couldn't create roles into a role table.");
+        console.log("Couldn't create roles into a role' table.");
         console.log(error);
         throw error;
     }
@@ -105,7 +121,18 @@ async function generateUsers(db) {
                      ('Ona Onaite', 'ona@ona.lt', '${hash('ona@ona.lt')}', 2);`;
         await db.execute(sql);
     } catch (error) {
-        console.log("Couldn't create users into a users table.");
+        console.log("Couldn't create users into a users' table.");
+        console.log(error);
+        throw error;
+    }
+}
+
+async function generateCities(db) {
+    try {
+        const sql = `INSERT INTO cities (title) VALUES ('Vilnius'), ('Kaunas'), ('Klaipeda'), ('Panevezys'), ('Siauliai');`;
+        await db.execute(sql);
+    } catch (error) {
+        console.log("Couldn't create cities into a cities' table.");
         console.log(error);
         throw error;
     }
