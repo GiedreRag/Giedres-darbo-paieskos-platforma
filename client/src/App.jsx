@@ -10,6 +10,7 @@ import { UserLayout } from './layout/UserLayout';
 import { AdminCitiesList } from './pages/AdminCitiesList';
 import { UpdateForm } from './pages/UpdateForm';
 import { AdminNewCity } from './pages/AdminNewCity';
+import { AdminEditCity } from './pages/AdminEditCity';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path='/koreguoti-forma' element={<UpdateForm />}></Route>
             <Route path='/koreguoti-forma/miestu-sarasas' element={<AdminCitiesList />}></Route>
             <Route path='/koreguoti-forma/miestu-sarasas/naujas' element={<AdminNewCity />}></Route>
+            <Route path='/koreguoti-forma/miestu-sarasas/:city/redaguoti' element={<AdminEditCity />}></Route>
           </Route>
           <Route Component={PublicLayout}>
             <Route path='*' element={<Page404 />}></Route>
