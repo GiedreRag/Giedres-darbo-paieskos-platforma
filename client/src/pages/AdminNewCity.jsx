@@ -28,14 +28,14 @@ export function AdminNewCity() {
             credentials: 'include',
             body: JSON.stringify({ title: text })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'ok') {
-                addCity(text);
-                navigate('/koreguoti-forma/miestu-sarasas');
-            }
-        })
-        .catch(console.error);
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    addCity(text);
+                    navigate('/koreguoti-forma/miestu-sarasas');
+                }
+            })
+            .catch(console.error);
     }
 
     return (
