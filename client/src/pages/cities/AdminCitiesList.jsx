@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { GlobalContext } from "../context/GlobalContext";
-import { NotAllowed } from "../components/NotAllowed";
-import { CitiesTable } from "../components/CitiesTable";
+import { GlobalContext } from "../../context/GlobalContext";
+import { NotAllowed } from "../../components/NotAllowed";
+import { CitiesTable } from "../../components/CitiesTable";
 import { Link } from "react-router-dom";
 
 export function AdminCitiesList() {

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import { GlobalContext } from "../context/GlobalContext";
-import { NotAllowed } from "../components/NotAllowed";
-import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../../context/GlobalContext";
+import { NotAllowed } from "../../components/NotAllowed";
+import { useNavigate, Link } from "react-router-dom";
 
 export function AdminNewCity() {
     const navigate = useNavigate();
@@ -28,14 +28,14 @@ export function AdminNewCity() {
             credentials: 'include',
             body: JSON.stringify({ title: text })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'ok') {
-                addCity(text);
-                navigate('/koreguoti-forma/miestu-sarasas');
-            }
-        })
-        .catch(console.error);
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    addCity(text);
+                    navigate('/koreguoti-forma/miestu-sarasas');
+                }
+            })
+            .catch(console.error);
     }
 
     return (
@@ -51,7 +51,8 @@ export function AdminNewCity() {
                         <label htmlFor="city">Miestas</label>
                     </div>
 
-                    <button className="btn btn-primary py-2" type="submit">Prideti</button>
+                    <button className="btn btn-primary py-2 me-2" type="submit">Prideti</button>
+                    <Link className="btn btn-danger py-2" to="/koreguoti-forma/miestu-sarasas" type="submit">Atsaukti</Link>
                 </form>
             </div>
         </div>

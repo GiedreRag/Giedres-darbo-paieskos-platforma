@@ -29,20 +29,24 @@ export function Login() {
                 credentials: 'include',
                 body: JSON.stringify({ email, password }),
             })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === 'ok') {
-                        updateLoginStatus(true);
-                        updateEmail(data.user.email);
-                        updateFullname(data.user.fullname);
-                        updateRole(data.user.role);
-                        navigate('/paskyra');
-                    }
-                })
-                .catch(err => console.error(err));
+            .then(res => {
+                if (res.status === 403) {
+                    return res.json().then(data => alert(data.msg));
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data.status === 'ok') {
+                    updateLoginStatus(true);
+                    updateEmail(data.user.email);
+                    updateFullname(data.user.fullname);
+                    updateRole(data.user.role);
+                    navigate('/paskyra');
+                }
+            })
+            .catch(err => console.error(err));
         }
     }
-
     return (
         <div className="container">
             <div className="row">
@@ -50,11 +54,11 @@ export function Login() {
                     <h1 className="h3 mb-3 fw-normal">Prasom prisijungti</h1>
 
                     <div className="form-floating mb-3">
-                        <input onChange={emailUpdateHandler} autoComplete="On" value={email} type="email" className="form-control" id="email" />
+                        <input onChange={emailUpdateHandler} autoComplete="on" value={email} type="email" className="form-control" id="email" />
                         <label htmlFor="email">Elektroninis pastas</label>
                     </div>
                     <div className="form-floating mb-3">
-                        <input onChange={passwordUpdateHandler} value={password} autoComplete="Off" type="password" className="form-control" id="password" placeholder="Password" />
+                        <input onChange={passwordUpdateHandler} value={password} autoComplete="off" type="password" className="form-control" id="password" placeholder="Password" />
                         <label htmlFor="password">Slaptazodis</label>
                     </div>
 

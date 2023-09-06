@@ -11,6 +11,7 @@ export const initialContext = {
     updateEmail: () => { },
     cities: [],
     addCity: () => { },
+    changeCity: () => { },
     updateCity: () => { },
     deleteCity: () => { },
 };
@@ -56,7 +57,7 @@ export const ContextWrapper = (props) => {
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'ok' && data.list) {
-                    setCities(data.list.map(city => city.title));
+                    setCities(data.list.map(t => t.title));
                 }
             })
             .catch(console.error);
@@ -81,16 +82,20 @@ export const ContextWrapper = (props) => {
         setEmail(email);
     }
 
+    function updateCities(cities) {
+        setCities(cities);
+    }
+
     function addCity(city) {
         setCities(pre => [...pre, city]);
     }
 
-    function updateCity(cities) {
-        setCities(cities);
-    }
-
     function deleteCity(city) {
         setCities(pre => pre.filter(title => title !== city));
+    }
+
+    function changeCity(oldCityName, newCityName) {
+        setCities(pre => pre.map(title => title === oldCityName ? newCityName : title));
     }
 
     const value = {
@@ -104,8 +109,9 @@ export const ContextWrapper = (props) => {
         updateEmail,
         cities,
         addCity,
-        updateCity,
+        updateCities,
         deleteCity,
+        changeCity,
     };
 
     return (
