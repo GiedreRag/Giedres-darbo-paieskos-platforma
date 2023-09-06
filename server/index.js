@@ -29,7 +29,7 @@ app.use(express.static('public'));
 app.use('/api', api);
 
 app.get('/', (_req, res) => {
-    return res.status(200).json({ msg: 'Welcome to home page.' });
+    return res.status(200).json({ msg: "Welcome to home page." });
 });
 
 app.get('*', (_req, res) => {

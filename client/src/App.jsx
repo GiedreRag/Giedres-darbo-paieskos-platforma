@@ -5,12 +5,13 @@ import { Page404 } from './pages/Page404';
 import { Home } from './pages/Home';
 import { Register } from './pages/Register';
 import { Login } from './pages/Login';
-import { Account } from './pages/Account';
+import { Account } from './pages/accounts/Account';
 import { UserLayout } from './layout/UserLayout';
-import { AdminCitiesList } from './pages/AdminCitiesList';
-import { UpdateForm } from './pages/UpdateForm';
-import { AdminNewCity } from './pages/AdminNewCity';
-import { AdminEditCity } from './pages/AdminEditCity';
+import { AdminCitiesList } from './pages/cities/AdminCitiesList';
+import { UpdateForm } from './pages/accounts/admin/UpdateForm';
+import { AdminNewCity } from './pages/cities/AdminNewCity';
+import { AdminEditCity } from './pages/cities/AdminEditCity';
+import { Users } from './pages/users/Users';
 
 
 function App() {
@@ -28,7 +29,8 @@ function App() {
             <Route path='/koreguoti-forma' element={<UpdateForm />}></Route>
             <Route path='/koreguoti-forma/miestu-sarasas' element={<AdminCitiesList />}></Route>
             <Route path='/koreguoti-forma/miestu-sarasas/naujas' element={<AdminNewCity />}></Route>
-            <Route path='/koreguoti-forma/miestu-sarasas/:city/redaguoti' element={<AdminEditCity />}></Route>
+            <Route path='/koreguoti-forma/miestu-sarasas/:city/koreguoti' element={<AdminEditCity />}></Route>
+            <Route path='/vartotojai' element={<Users />}></Route>
           </Route>
           <Route Component={PublicLayout}>
             <Route path='*' element={<Page404 />}></Route>

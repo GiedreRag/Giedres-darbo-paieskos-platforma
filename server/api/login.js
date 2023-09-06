@@ -9,7 +9,7 @@ login.post('/', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const selectQuery = `SELECT users.id, users.fullname, users.email, roles.role FROM users
+        const selectQuery = `SELECT users.id, users.fullname, users.email, users.is_Blocked, roles.role FROM users
                             INNER JOIN roles ON roles.id = users.role_id
                             WHERE email = ? AND password_hash = ?;`;
         const selectRes = await connection.execute(selectQuery, [email, hash(password)]);
@@ -23,6 +23,13 @@ login.post('/', async (req, res) => {
         }
 
         const userObj = users[0];
+
+        if (userObj.is_Blocked) {
+            return res.status(403).json({
+                status: 'err',
+                msg: 'Jus esat uzblokuotas. Susisiekite su administracija',
+            });
+        }
         const token = randomUUID();
 
         const insertQuery = `INSERT INTO tokens (token, user_id) VALUES (?, ?)`;
