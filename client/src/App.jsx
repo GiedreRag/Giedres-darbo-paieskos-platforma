@@ -27,10 +27,10 @@ function App() {
           </Route>
           <Route Component={UserLayout}>
             <Route path='/paskyra' element={<Account />}></Route>
-            <Route path='/koreguoti-forma' element={<UpdateForm />}></Route>
-            <Route path='/koreguoti-forma/miestu-sarasas' element={<AdminCitiesList />}></Route>
-            <Route path='/koreguoti-forma/miestu-sarasas/naujas' element={<AdminNewCity />}></Route>
-            <Route path='/koreguoti-forma/miestu-sarasas/:city/koreguoti' element={<AdminEditCity />}></Route>
+            <Route path='/paskyra/koreguoti-forma' element={<UpdateForm />}></Route>
+            <Route path='/paskyra/koreguoti-forma/miestu-sarasas' element={<AdminCitiesList />}></Route>
+            <Route path='/paskyra/koreguoti-forma/miestu-sarasas/naujas' element={<AdminNewCity />}></Route>
+            <Route path='/paskyra/koreguoti-forma/miestu-sarasas/:city/koreguoti' element={<AdminEditCity />}></Route>
             <Route path='/paskyra/vartotojai' element={<Users />}></Route>
             <Route path='/paskyra/skelbimai' element={<Posters />}></Route>
           </Route>

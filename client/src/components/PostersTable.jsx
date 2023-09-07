@@ -46,7 +46,7 @@ export function PostersTable() {
                                 <td>{poster.city}</td>
                                 <td>{poster.salary}</td>
                                 <td>
-                                    <Link className="btn btn-primary py-2 me-2" to={`/skelbimai/koreguoti-skelbima/${poster.title}/koreguoti`}>Koreguoti</Link>
+                                    <Link className="btn btn-primary py-2 me-2" to={`/paskyra/skelbimai/koreguoti-skelbima/${poster.title}/koreguoti`}>Koreguoti</Link>
                                     {/* <button className="btn btn-danger py-2" onClick={() => deletePosterHandler(poster)} type='button'>Pasalinti</button> */}
                                 </td>
                             </tr>

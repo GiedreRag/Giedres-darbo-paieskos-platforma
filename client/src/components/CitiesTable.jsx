@@ -39,7 +39,7 @@ export function CitiesTable() {
                                 <td>{idx + 1}</td>
                                 <td>{city}</td>
                                 <td>
-                                    <Link className="btn btn-primary py-2 me-2" to={`/koreguoti-forma/miestu-sarasas/${city}/koreguoti`}>Koreguoti</Link>
+                                    <Link className="btn btn-primary py-2 me-2" to={`/paskyra/koreguoti-forma/miestu-sarasas/${city}/koreguoti`}>Koreguoti</Link>
                                     <button className="btn btn-danger py-2" onClick={() => deleteCityHandler(city)} type='button'>Pasalinti</button>
                                 </td>
                             </tr>
