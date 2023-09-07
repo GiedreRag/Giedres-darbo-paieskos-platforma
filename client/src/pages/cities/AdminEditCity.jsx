@@ -33,7 +33,7 @@ export function AdminEditCity() {
             .then(data => {
                 if (data.status === 'ok') {
                     changeCity(city, text);
-                    navigate('/koreguoti-forma/miestu-sarasas');
+                    navigate('/paskyra/koreguoti-forma/miestu-sarasas');
                 }
             })
             .catch(console.error);
@@ -53,7 +53,7 @@ export function AdminEditCity() {
                     </div>
 
                     <button className="btn btn-primary py-2 me-2" type="submit">Pakeisti</button>
-                    <Link className="btn btn-danger py-2" to="/koreguoti-forma/miestu-sarasas" type="submit">Atsaukti</Link>
+                    <Link className="btn btn-danger py-2" to="/paskyra/koreguoti-forma/miestu-sarasas" type="submit">Atsaukti</Link>
                 </form>
             </div>
         </div>

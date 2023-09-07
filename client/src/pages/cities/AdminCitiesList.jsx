@@ -18,7 +18,7 @@ export function AdminCitiesList() {
                     Miestai
                 </h4>
                 <div>
-                    <Link to='/koreguoti-forma/miestu-sarasas/naujas'>Prideti nauja</Link>
+                    <Link to='/paskyra/koreguoti-forma/miestu-sarasas/naujas'>Prideti nauja</Link>
                 </div>
                 <div className="col-12">
                     <CitiesTable />
