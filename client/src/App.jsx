@@ -13,6 +13,7 @@ import { AdminNewCity } from './pages/cities/AdminNewCity';
 import { AdminEditCity } from './pages/cities/AdminEditCity';
 import { Users } from './pages/users/Users';
 import { Posters } from './pages/posters/Posters';
+import { AddPoster } from './pages/posters/AddPoster';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path='/paskyra/koreguoti-forma/miestu-sarasas/:city/koreguoti' element={<AdminEditCity />}></Route>
             <Route path='/paskyra/vartotojai' element={<Users />}></Route>
             <Route path='/paskyra/skelbimai' element={<Posters />}></Route>
+            <Route path='/paskyra/skelbimai/naujas' element={<AddPoster />}></Route>
           </Route>
           <Route Component={PublicLayout}>
             <Route path='*' element={<Page404 />}></Route>
