@@ -23,6 +23,7 @@ async function dbSetup() {
         await usersTable(connection);
         await tokensTable(connection);
         await citiesTable(connection);
+        await postersTable(connection);
 
         await generateRoles(connection);
         await generateUsers(connection);
@@ -64,7 +65,7 @@ async function tokensTable(db) {
                         PRIMARY KEY (id),
                         KEY user_id (user_id),
                         CONSTRAINT tokens_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`;
+                    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`;
         await db.execute(sql);
     } catch (error) {
         console.log("Couldn't create tokens table.");
@@ -79,7 +80,7 @@ async function rolesTable(db) {
                         id int(10) NOT NULL AUTO_INCREMENT,
                         role varchar(15) NOT NULL,
                         PRIMARY KEY (id)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`;
+                    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`;
         await db.execute(sql);
     } catch (error) {
         console.log("Couldn't create roles table.");
@@ -91,13 +92,38 @@ async function rolesTable(db) {
 async function citiesTable(db) {
     try {
         const sql = `CREATE TABLE cities (
-                        id int(10) NOT NULL AUTO_INCREMENT,
+                        id int(3) NOT NULL AUTO_INCREMENT,
                         title varchar(30) NOT NULL,
                         PRIMARY KEY (id)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`;
+                    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`;
         await db.execute(sql);
     } catch (error) {
         console.log("Couldn't create cities table.");
+        console.log(error);
+        throw error;
+    }
+}
+
+async function postersTable(db) {
+    try {
+        const sql = `CREATE TABLE posters (
+                        id int(10) NOT NULL AUTO_INCREMENT,
+                        user_id int(10) NOT NULL,
+                        img varchar(100) NOT NULL,
+                        profession varchar(50) NOT NULL,
+                        tittle varchar(60) NOT NULL,
+                        city_id int(3) NOT NULL,
+                        salary decimal(6,2) unsigned DEFAULT 0.00,
+                        createdAt timestamp NOT NULL DEFAULT current_timestamp(),
+                        PRIMARY KEY (id),
+                        KEY user_id (user_id),
+                        KEY city_id (city_id),
+                        CONSTRAINT posters_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id),
+                        CONSTRAINT posters_ibfk_2 FOREIGN KEY (city_id) REFERENCES cities (id)
+                    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`;
+        await db.execute(sql);
+    } catch (error) {
+        console.log("Couldn't create posters table.");
         console.log(error);
         throw error;
     }
