@@ -25,7 +25,7 @@ export function AddPoster() {
 
     function updateImg(e) {
         const formData = new FormData();
-        formData.append('poster_image', e.target.files[0]);
+        formData.append('poster_img', e.target.files[0]);
 
         fetch('http://localhost:3001/api/upload/poster', {
             method: 'POST',
