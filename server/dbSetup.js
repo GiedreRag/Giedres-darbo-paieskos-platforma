@@ -111,7 +111,7 @@ async function postersTable(db) {
                         user_id int(10) NOT NULL,
                         img varchar(200) NOT NULL,
                         profession varchar(50) NOT NULL,
-                        tittle varchar(60) NOT NULL,
+                        title varchar(60) NOT NULL,
                         city_id int(3) NOT NULL,
                         salary decimal(6,2) unsigned DEFAULT 0.00,
                         createdAt timestamp NOT NULL DEFAULT current_timestamp(),
