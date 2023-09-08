@@ -9,7 +9,7 @@ export function AddPoster() {
     const { role, cities } = useContext(GlobalContext);
 
     const [img, setImg] = useState('');
-    const [imgErr, setImageErr] = useState('');
+    const [imgErr, setImgErr] = useState('');
     const [profession, setProfession] = useState('');
     const [professionErr, setProfessionErr] = useState('');
     const [title, setTitle] = useState('');
@@ -25,7 +25,7 @@ export function AddPoster() {
 
     function updateImg(e) {
         const formData = new FormData();
-        formData.append('company_image', e.target.files[0]);
+        formData.append('poster_image', e.target.files[0]);
 
         fetch('http://localhost:3001/api/upload/poster', {
             method: 'POST',
@@ -97,7 +97,7 @@ export function AddPoster() {
 
     function isValidForm() {
         const imgMsg = imgValidity();
-        setImageErr(imgMsg);
+        setImgErr(imgMsg);
 
         const professionMsg = professionValidity();
         setProfessionErr(professionMsg);
@@ -142,13 +142,13 @@ export function AddPoster() {
     }
 
     const defaultImgStyle = {
-        height: 300,
+        height: 200,
         objectFit: 'cover',
         objectPosition: 'center',
         border: '1px solid #ccc',
     };
     const imgStyle = {
-        height: 300,
+        height: 200,
         objectFit: 'contain',
         objectPosition: 'center',
         border: '1px solid #ccc',
@@ -162,7 +162,7 @@ export function AddPoster() {
                 </div>
                 <form onSubmit={submitHandler} className="col-12 col-sm-8">
                     <div className="row mb-3">
-                        <img src={img ? img : defaultImg} alt="Car" className="col-12 p-0 mb-3"
+                        <img src={img ? img : defaultImg} alt="company" className="col-12 p-0 mb-3"
                             style={img ? imgStyle : defaultImgStyle} />
                         <label className="col-12 col-md-4 form-label" htmlFor="image">Nuotrauka</label>
                         <div className="col-12 col-md-8">
@@ -195,8 +195,8 @@ export function AddPoster() {
                             <select className={`form-select ${cityErr ? 'is-invalid' : ''}`}
                                 onChange={e => setCity(e.target.value)} value={city} id="city">
                                 <option value="None">- Issirinkti</option>
-                                {cities.map(ct =>
-                                    <option key={ct} value={ct}>{ct}</option>
+                                {cities.map(city =>
+                                    <option key={city} value={city}>{city}</option>
                                 )}
                             </select>
                             <div className="invalid-feedback">{cityErr}</div>

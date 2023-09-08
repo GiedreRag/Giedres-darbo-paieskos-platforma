@@ -3,55 +3,93 @@ import { connection } from '../dbSetup.js';
 
 export const posters = express.Router();
 
-// posters.post('/', async (req, res) => {
-//     const { title } = req.body;
+posters.post('/', async (req, res) => {
+    const { role, id } = req.user;
 
-//     if (!title) {
-//         return res.status(400).json({
-//             status: 'err',
-//             msg: 'City could not be created. "Title" value was empty.',
-//         });
-//     }
+    if (role !== 'seller') {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'You are not a seller.',
+        });
+    }
 
-//     try {
-//         const selectQuery = `SELECT * FROM cities WHERE title = ?;`;
-//         const selectRes = await connection.execute(selectQuery, [title]);
-//         const cities = selectRes[0];
+    const { img, profession, title, city, salary } = req.body;
 
-//         if (cities.length > 0) {
-//             return res.status(200).json({
-//                 status: 'err-list',
-//                 errors: [
-//                     {
-//                         input: 'city',
-//                         msg: 'Such city already exists.',
-//                     }
-//                 ]
-//             });
-//         }
+    if (!img) {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'Poster could not be created. Provide "image" value.',
+        });
+    }
 
-//         const insertQuery = `INSERT INTO cities (title) VALUES (?)`;
-//         const insertRes = await connection.execute(insertQuery, [title]);
-//         const insertResObject = insertRes[0];
+    if (!title) {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'Poster could not be created. Provide "title" value.',
+        });
+    }
 
-//         if (insertResObject.insertId > 0) {
-//             return res.status(200).json({
-//                 status: 'ok',
-//                 msg: 'City created.',
-//             });
-//         } else {
-//             return res.status(400).json({
-//                 status: 'err',
-//                 msg: 'City could not be created.',
-//             });
-//         }
-//     } catch (error) {
-//         return res.status(500).json({
-//             status: 'err',
-//             msg: 'POST: CITIES API - server error.',
-//         });
-//     }
-// });
+    if (!profession) {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'Poster could not be created. Provide "profession" value.',
+        });
+    }
+
+    if (!city) {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'Poster could not be created. Provide "city" value.',
+        });
+    }
+
+    if (!salary) {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'Poster could not be created. Provide "salary" value.',
+        });
+    }
+
+    try {
+        const cityQuery = `SELECT id FROM cities WHERE title = ?`;
+        const cityRes = await connection.execute(cityQuery, [city]);
+        const cityResArray = cityRes[0];
+
+        if (cityResArray.length < 1) {
+            return res.status(400).json({
+                status: 'err',
+                msg: 'City value is invalid.',
+            });
+        }
+
+        const cityId = cityResArray[0].id;
+
+        const insertQuery = `INSERT INTO posters
+            (user_id, img, profession, title, city_id, salary)
+            VALUES (?, ?, ?, ?, ?, ?);`;
+        const insertRes = await connection.execute(insertQuery,
+            [id, img, profession, title, cityId, salary]);
+        const insertResObject = insertRes[0];
+
+        if (insertResObject.insertId > 0) {
+            return res.status(201).json({
+                status: 'ok',
+                msg: 'Poster created',
+            });
+        } else {
+            return res.status(400).json({
+                status: 'err',
+                msg: 'Poster could not be created',
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            status: 'err',
+            msg: 'POST: POSTER - server error.',
+        });
+    }
+});
 
 posters.get('/', async (req, res) => {
     const role = req.user.role;

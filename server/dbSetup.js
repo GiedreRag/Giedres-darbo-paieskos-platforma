@@ -109,7 +109,7 @@ async function postersTable(db) {
         const sql = `CREATE TABLE posters (
                         id int(10) NOT NULL AUTO_INCREMENT,
                         user_id int(10) NOT NULL,
-                        img varchar(100) NOT NULL,
+                        img varchar(200) NOT NULL,
                         profession varchar(50) NOT NULL,
                         tittle varchar(60) NOT NULL,
                         city_id int(3) NOT NULL,
