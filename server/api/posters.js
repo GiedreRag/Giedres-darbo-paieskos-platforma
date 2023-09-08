@@ -96,10 +96,12 @@ posters.get('/', async (req, res) => {
     let selectQuery = '';
 
     if (role === 'admin') {
-        selectQuery = `SELECT * FROM posters;`;
+        selectQuery = `SELECT posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+                        INNER JOIN cities ON cities.id = posters.city_id;`;
 
     } else if (role === 'seller') {
-        selectQuery = `SELECT * FROM posters WHERE user_id = ?;`;
+        selectQuery = `SELECT posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+                        INNER JOIN cities ON cities.id = posters.city_id WHERE user_id = ?;`;
 
     } else {
         return res.status(401).json({

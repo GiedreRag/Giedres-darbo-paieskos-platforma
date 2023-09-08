@@ -45,8 +45,8 @@ export function UsersTable() {
 
     }
 
-    const Block = ({ userEmail }) => (<button onClick={() => handleIsBlocked(userEmail, true)} className="btn btn-danger py-2" disabled={email === userEmail}>Blokuoti</button>);
-    const Unblock = ({ userEmail }) => (<button onClick={() => handleIsBlocked(userEmail, false)} className="btn btn-danger py-2">Atblokuoti</button>);
+    const Block = ({ userEmail }) => (<button onClick={() => handleIsBlocked(userEmail, true)} className="btn btn-danger" disabled={email === userEmail}>Blokuoti</button>);
+    const Unblock = ({ userEmail }) => (<button onClick={() => handleIsBlocked(userEmail, false)} className="btn btn-danger">Atblokuoti</button>);
 
     return (
         <div className="container" >
@@ -58,7 +58,8 @@ export function UsersTable() {
                         <th scope="col">Elektroninis pastas</th>
                         <th scope="col">Role</th>
                         <th scope="col">Prisiregistravo</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Statusas</th>
+                        <th scope="col">Veiksmai</th>
                     </tr>
                 </thead>
                 <tbody>

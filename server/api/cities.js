@@ -3,6 +3,21 @@ import { connection } from '../dbSetup.js';
 
 export const cities = express.Router();
 
+const ensureAdmin = (req, res, next) => {
+    const { role } = req.user;
+
+    if (role !== 'admin') {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'You are not an admin.',
+        });
+    }
+
+    next();
+};
+
+cities.use(ensureAdmin);
+
 cities.post('/', async (req, res) => {
     const { title } = req.body;
 

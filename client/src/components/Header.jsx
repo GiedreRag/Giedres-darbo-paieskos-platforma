@@ -26,17 +26,17 @@ export function Header() {
 
     const publicLinks = <>
             <Link to="/prisijungimas" className="btn btn-outline-primary me-2">Prisijungti</Link>
-            <Link to="/registracija" className="btn btn-primary">Registruotis</Link>
+            <Link to="/registracija" className="btn btn-outline-primary ">Registruotis</Link>
     </>; 
 
     const adminLinks = <>
             <Link to="/paskyra" className="btn btn-outline-primary me-2">Paskyra</Link>
-            <Link onClick={logOut} className="btn btn-primary">Atsijungti</Link>
+            <Link onClick={logOut} className="btn btn-outline-primary">Atsijungti</Link>
     </>;
 
     const sellerLinks = <>
             <Link to="/paskyra" className="btn btn-outline-primary me-2">Paskyra</Link>
-            <Link onClick={logOut} className="btn btn-primary">Atsijungti</Link>
+            <Link onClick={logOut} className="btn btn-outline-primary ">Atsijungti</Link>
     </>;
 
     let extralinks = <></>;

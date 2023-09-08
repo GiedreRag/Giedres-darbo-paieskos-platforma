@@ -3,6 +3,21 @@ import { connection } from '../dbSetup.js';
 
 export const users = express.Router();
 
+const ensureAdmin = (req, res, next) => {
+    const { role } = req.user;
+
+    if (role !== 'admin') {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'You are not an admin.',
+        });
+    }
+
+    next();
+};
+
+users.use(ensureAdmin);
+
 users.get('/', async (_req, res) => {
     try {
         const selectQuery = `SELECT users.fullname, users.email, users.is_Blocked, users.createdAt, roles.role FROM users
