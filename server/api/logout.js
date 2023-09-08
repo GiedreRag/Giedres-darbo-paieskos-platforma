@@ -38,6 +38,6 @@ logout.get('/', async (req, res) => {
     }
 });
 
-logout.use((req, res, next) => {
+logout.use((_req, res, _next) => {
     return res.status(404).json({ msg: 'Unsupported "Logout" method' });
 });

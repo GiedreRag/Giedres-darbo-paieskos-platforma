@@ -112,6 +112,6 @@ login.get('/', async (req, res) => {
 
 });
 
-login.use((req, res, next) => {
+login.use((_req, res, _next) => {
     return res.status(404).json({ msg: 'Unsupported "Login" method' });
 });
