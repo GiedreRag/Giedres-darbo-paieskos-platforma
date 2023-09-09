@@ -14,6 +14,7 @@ import { AdminEditCity } from './pages/cities/AdminEditCity';
 import { Users } from './pages/users/Users';
 import { Posters } from './pages/posters/Posters';
 import { AddPoster } from './pages/posters/AddPoster';
+import { EditPoster } from './pages/posters/EditPoster';
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
             <Route path='/paskyra/vartotojai' element={<Users />}></Route>
             <Route path='/paskyra/skelbimai' element={<Posters />}></Route>
             <Route path='/paskyra/skelbimai/naujas' element={<AddPoster />}></Route>
+            <Route path='/paskyra/skelbimai/:posterId/koreguoti' element={<EditPoster />}></Route>
           </Route>
           <Route Component={PublicLayout}>
             <Route path='*' element={<Page404 />}></Route>
