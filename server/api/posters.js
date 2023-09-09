@@ -7,7 +7,7 @@ posters.post('/', async (req, res) => {
     const { role, id } = req.user;
 
     if (role !== 'seller') {
-        return res.status(400).json({
+        return res.status(401).json({
             status: 'err',
             msg: 'You are not a seller.',
         });
@@ -96,11 +96,11 @@ posters.get('/', async (req, res) => {
     let selectQuery = '';
 
     if (role === 'admin') {
-        selectQuery = `SELECT posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+        selectQuery = `SELECT posters.id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
                         INNER JOIN cities ON cities.id = posters.city_id;`;
 
     } else if (role === 'seller') {
-        selectQuery = `SELECT posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+        selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
                         INNER JOIN cities ON cities.id = posters.city_id WHERE user_id = ?;`;
 
     } else {
@@ -124,7 +124,44 @@ posters.get('/', async (req, res) => {
             msg: 'GET: POSTERS API - server error.',
         });
     }
+
 });
+
+// posters.get('/:id', async (req, res) => {
+//     const posterId = req.params;
+//     const role = req.user.role;
+//     let selectQuery = '';
+
+//     if (role === 'admin') {
+//         selectQuery = `SELECT posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+//                         INNER JOIN cities ON cities.id = posters.city_id;`;
+
+//     } else if (role === 'seller') {
+//         selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+//                         INNER JOIN cities ON cities.id = posters.city_id WHERE user_id = ?;`;
+
+//     } else {
+//         return res.status(401).json({
+//             status: 'err',
+//             msg: 'Unauthorized.',
+//         });
+//     }
+
+//     try {
+//         const selectRes = await connection.execute(selectQuery, [req.user.id]);
+//         const posters = selectRes[0];
+
+//         return res.status(200).json({
+//             status: 'ok',
+//             list: posters,
+//         });
+//     } catch (error) {
+//         return res.status(500).json({
+//             status: 'err',
+//             msg: 'GET: POSTERS API - server error.',
+//         });
+//     }
+// });
 
 // posters.delete('/:title', async (req, res) => {
 //     const { title } = req.params;

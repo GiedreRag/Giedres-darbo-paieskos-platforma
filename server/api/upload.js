@@ -4,21 +4,6 @@ import multer from 'multer';
 
 export const upload = express.Router();
 
-const ensureUser = (req, res, next) => {
-    const { role } = req.user;
-
-    if (role !== 'admin' || role !== 'seller') {
-        return res.status(401).json({
-            status: 'err',
-            msg: 'Unauthorized.',
-        });
-    }
-
-    next();
-};
-
-upload.use(ensureUser);
-
 const posterStorage = multer.diskStorage({
     destination: (_req, _file, cb) => {
         cb(null, 'public/images/poster');
@@ -27,6 +12,7 @@ const posterStorage = multer.diskStorage({
         cb(null, 'poster_' + Date.now() + path.extname(file.originalname));
     },
 });
+
 const posterUpload = multer({
     storage: posterStorage,
     limits: {
