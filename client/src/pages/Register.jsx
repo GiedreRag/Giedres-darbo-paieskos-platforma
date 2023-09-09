@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function Register() {
     const navigate = useNavigate();
+    const [formErr, setFormErr] = useState('');
     const [fullname, setFullname] = useState('');
     const [fullnameErr, setFullnameErr] = useState('');
     const [fullnameValid, setFullnameValid] = useState(false);
@@ -149,7 +150,7 @@ export function Register() {
                                 setFullnameErr(item.msg);
                             }
                             if (item.input === 'email') {
-                                setEmailErr(item.msg);
+                                setFormErr(item.msg);
                             }
                             if (item.input === 'password') {
                                 setPasswordErr(item.msg);
@@ -168,6 +169,7 @@ export function Register() {
         <div className="container">
             <div className="row">
                 <form onSubmit={submitHandler} className="col-10 col-sm-8 col-md-6 col-lg-4 m-auto mt-3">
+                {formErr && <div className="alert alert-danger">{formErr}</div>}
                     <div className="form-floating mb-4">
                         <input onChange={updateFullname} onBlur={isValidFullname} autoComplete="on" value={fullname} type="text" id="fullname"
                             className={`form-control ${fullnameErr ? 'is-invalid' : ''} ${fullnameValid ? 'is-valid' : ''}`} />

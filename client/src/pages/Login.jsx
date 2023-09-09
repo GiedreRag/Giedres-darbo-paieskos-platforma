@@ -6,6 +6,7 @@ export function Login() {
     const { updateEmail, updateFullname, updateLoginStatus, updateRole } = useContext(GlobalContext);
     const navigate = useNavigate();
 
+    const [formErr, setFormErr] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -19,7 +20,7 @@ export function Login() {
 
     function submitHandler(e) {
         e.preventDefault();
-        if (email && password) {
+        if (email && password && email.includes('@')) {
             fetch('http://localhost:3001/api/login', {
                 method: 'POST',
                 headers: {
@@ -36,7 +37,9 @@ export function Login() {
                 return res.json();
             })
             .then(data => {
-                if (data.status === 'ok') {
+                if (data.status === 'err') {
+                    setFormErr(data.msg);
+                } else if (data.status === 'ok') {
                     updateLoginStatus(true);
                     updateEmail(data.user.email);
                     updateFullname(data.user.fullname);
@@ -45,6 +48,8 @@ export function Login() {
                 }
             })
             .catch(err => console.error(err));
+        } else {
+            setFormErr('Invalid input provided');
         }
     }
     return (
@@ -52,7 +57,7 @@ export function Login() {
             <div className="row">
                 <form onSubmit={submitHandler} className="col-12 col-sm-8 col-md-6 col-lg-4 m-auto">
                     <h1 className="h3 mb-3 fw-normal">Prasom prisijungti</h1>
-
+                    {formErr && <div className="alert alert-danger">{formErr}</div>}
                     <div className="form-floating mb-3">
                         <input onChange={emailUpdateHandler} autoComplete="on" value={email} type="email" className="form-control" id="email" />
                         <label htmlFor="email">Elektroninis pastas</label>

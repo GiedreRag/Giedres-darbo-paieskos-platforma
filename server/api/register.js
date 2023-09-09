@@ -18,7 +18,7 @@ register.post('/', async (req, res) => {
                 errors: [
                     {
                         input: 'email',
-                        msg: 'User with such email already exists.'
+                        msg: 'Klaida su ivesta informacija.'
                     }
                 ]
             });

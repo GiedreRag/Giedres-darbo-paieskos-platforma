@@ -8,6 +8,13 @@ export const login = express.Router();
 login.post('/', async (req, res) => {
     const { email, password } = req.body;
 
+    if (!email || !password || !email.includes('@')) {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'Invalid input provided',
+        });
+    }
+    
     try {
         const selectQuery = `SELECT users.id, users.fullname, users.email, users.is_Blocked, roles.role FROM users
                             INNER JOIN roles ON roles.id = users.role_id
@@ -106,8 +113,13 @@ login.get('/', async (req, res) => {
             status: 'ok',
             user: users[0],
         });
-    } catch (error) {
-
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: 'err',
+            msg: 'Server error.',
+        });
     }
 
 });
