@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 
-export function PostersTable() {
+export function PostersTable({ filterCity, filterProfession }) {
     const { posters, updatePosters } = useContext(GlobalContext); 
 
     useEffect(() => {
@@ -45,7 +45,10 @@ export function PostersTable() {
                 </thead>
                 <tbody>
                     {
-                        posters.map((poster, idx) => (
+                        posters
+                        .filter(poster => filterCity === 'All' ? true : poster.city === filterCity)
+                        .filter(poster => filterProfession === '' ? true : poster.profession.toLowerCase().includes(filterProfession))
+                        .map((poster, idx) => (
                             <tr key={poster.title + idx}>
                                 <td>{idx + 1}</td>
                                 <td>
@@ -56,7 +59,7 @@ export function PostersTable() {
                                 <td>{poster.city}</td>
                                 <td>{poster.salary}</td>
                                 <td>
-                                    <Link className="btn btn-primary me-2" to={`/paskyra/skelbimai/koreguoti-skelbima/${poster.title}/koreguoti`}>Koreguoti</Link>
+                                    <Link className="btn btn-outline-primary me-2" to={`/paskyra/skelbimai/${poster.id}/koreguoti`}>Koreguoti</Link>
                                     {/* <button className="btn btn-danger py-2" onClick={() => deletePosterHandler(poster)} type='button'>Pasalinti</button> */}
                                 </td>
                             </tr>

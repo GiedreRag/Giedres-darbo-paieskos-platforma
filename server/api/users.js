@@ -7,7 +7,7 @@ const ensureAdmin = (req, res, next) => {
     const { role } = req.user;
 
     if (role !== 'admin') {
-        return res.status(400).json({
+        return res.status(401).json({
             status: 'err',
             msg: 'You are not an admin.',
         });
