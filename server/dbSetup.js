@@ -28,6 +28,7 @@ async function dbSetup() {
         await generateRoles(connection);
         await generateUsers(connection);
         await generateCities(connection);
+        await generatePosters(connection);
     }
 
     return connection;
@@ -144,7 +145,8 @@ async function generateUsers(db) {
     try {
         const sql = `INSERT INTO users (fullname, email, password_hash, role_id) 
                     VALUES ('Jonas Jonaitis', 'jonas@jonas.lt', '${hash('jonas@jonas.lt')}', 1),
-                     ('Ona Onaite', 'ona@ona.lt', '${hash('ona@ona.lt')}', 2);`;
+                     ('Ona Onaite', 'ona@ona.lt', '${hash('ona@ona.lt')}', 2),
+                     ('Lukas Lukaitis', 'lukas@lukas.lt', '${hash('lukas@lukas.lt')}', 2);`;
         await db.execute(sql);
     } catch (error) {
         console.log("Couldn't create users into a users' table.");
@@ -159,6 +161,20 @@ async function generateCities(db) {
         await db.execute(sql);
     } catch (error) {
         console.log("Couldn't create cities into a cities' table.");
+        console.log(error);
+        throw error;
+    }
+}
+
+async function generatePosters(db) {
+    try {
+        const sql = `INSERT INTO posters (user_id, img, profession, title, city_id, salary) VALUES 
+        ('2', 'http://localhost:3001/images/poster/poster_1694267980969.jpg', 'Programuotojas', 'Programuotojo be patirties', '2', '900'), 
+        ('3', 'http://localhost:3001/images/poster/poster_1694268042203.png', 'IT', 'Patyrusio IT specialisto', '1', '2500'), 
+        ('2', 'http://localhost:3001/images/poster/poster_1694268195044.jpg', 'Programuotojas', 'JavaSript specialisto', '2', '3000');`;
+        await db.execute(sql);
+    } catch (error) {
+        console.log("Couldn't create posters into a posters' table.");
         console.log(error);
         throw error;
     }
