@@ -127,41 +127,41 @@ posters.get('/', async (req, res) => {
 
 });
 
-// posters.get('/:id', async (req, res) => {
-//     const posterId = req.params;
-//     const role = req.user.role;
-//     let selectQuery = '';
+posters.get('/:posterId', async (req, res) => {
+    const { posterId } = req.params;
+    const role = req.user.role;
+    let selectQuery = '';
 
-//     if (role === 'admin') {
-//         selectQuery = `SELECT posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
-//                         INNER JOIN cities ON cities.id = posters.city_id;`;
+    if (role === 'admin') {
+        selectQuery = `SELECT posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+                        INNER JOIN cities ON cities.id = posters.city_id;`;
 
-//     } else if (role === 'seller') {
-//         selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
-//                         INNER JOIN cities ON cities.id = posters.city_id WHERE user_id = ?;`;
+    } else if (role === 'seller') {
+        selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+                        INNER JOIN cities ON cities.id = posters.city_id WHERE posters.id = ?;`;
 
-//     } else {
-//         return res.status(401).json({
-//             status: 'err',
-//             msg: 'Unauthorized.',
-//         });
-//     }
+    } else {
+        return res.status(401).json({
+            status: 'err',
+            msg: 'Unauthorized.',
+        });
+    }
 
-//     try {
-//         const selectRes = await connection.execute(selectQuery, [req.user.id]);
-//         const posters = selectRes[0];
+    try {
+        const selectRes = await connection.execute(selectQuery, [posterId]);
+        const posters = selectRes[0];
 
-//         return res.status(200).json({
-//             status: 'ok',
-//             list: posters,
-//         });
-//     } catch (error) {
-//         return res.status(500).json({
-//             status: 'err',
-//             msg: 'GET: POSTERS API - server error.',
-//         });
-//     }
-// });
+        return res.status(200).json({
+            status: 'ok',
+            poster: posters[0],
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'err',
+            msg: 'GET: POSTERS API - server error.',
+        });
+    }
+});
 
 // posters.delete('/:title', async (req, res) => {
 //     const { title } = req.params;
@@ -189,56 +189,69 @@ posters.get('/', async (req, res) => {
 //     }
 // });
 
-// posters.put('/:oldTitle', async (req, res) => {
-//     const { oldTitle } = req.params;
-//     const { newTitle } = req.body;
+posters.put('/:posterId', async (req, res) => {
+    const { posterId } = req.params;
+    const { role, id } = req.user;
+    const { img, profession, title, city, salary } = req.body;
 
-//     if (!oldTitle || !newTitle) {
-//         return res.status(400).json({
-//             status: 'err',
-//             msg: 'City could not be updated. "Title" values were empty.',
-//         });
-//     }
+    if (role !== 'seller') {
+        return res.status(401).json({
+            status: 'err',
+            msg: 'You are not a seller.',
+        });
+    }
 
-//     try {
-//         const selectQuery = `SELECT * FROM cities WHERE title = ?;`;
-//         const selectRes = await connection.execute(selectQuery, [newTitle]);
-//         const cities = selectRes[0];
+    const selectQuery = `SELECT * FROM posters WHERE id = ?;`;
+    const [selectedPosters] = await connection.execute(selectQuery, [posterId]);
 
-//         if (cities.length > 0) {
-//             return res.status(200).json({
-//                 status: 'err-list',
-//                 errors: [
-//                     {
-//                         input: 'city',
-//                         msg: 'Such city already exists.',
-//                     }
-//                 ]
-//             });
-//         }
+    if (selectedPosters.length < 1) {
+        return res.status(404).json({
+            status: 'err',
+            msg: 'Poster not found.',
+        });
+    }
 
-//         const updateQuery = `UPDATE cities SET title = ? WHERE title = ?`;
-//         const updateRes = await connection.execute(updateQuery, [newTitle, oldTitle]);
-//         const updateResObject = updateRes[0];
+    if (role === 'seler' && selectedPosters[0].user_id !== id) {
+        return res.status(401).json({
+            status: 'err',
+            msg: 'Unauthorised. You are not the original poster.',
+        });
+    }
 
-//         if (updateResObject.affectedRows > 0) {
-//             return res.status(200).json({
-//                 status: 'ok',
-//                 msg: 'City updated',
-//             });
-//         } else {
-//             return res.status(400).json({
-//                 status: 'err',
-//                 msg: 'City could not be updated',
-//             });
-//         }
-//     } catch (error) {
-//         return res.status(500).json({
-//             status: 'err',
-//             msg: 'PUT: CITIES API - server error.',
-//         });
-//     }
-// });
+    try {
+        const cityQuery = `SELECT id FROM cities WHERE title = ?;`;
+        const [cityResArray] = await connection.execute(cityQuery, [city]);
+
+        if (cityResArray.length < 1) {
+            return res.status(400).json({
+                status: 'err',
+                msg: 'City value is invalid.',
+            });
+        }
+
+        const cityId = cityResArray[0].id;
+
+        const updateQuery = `UPDATE posters SET img = ?, profession = ?, title = ?, city_id = ?, salary = ? WHERE id = ?`;
+        const updateResObject = await connection.execute(updateQuery, [img, profession, title, cityId, salary, posterId]);
+
+        if (updateResObject[0].affectedRows > 0) {
+            return res.status(200).json({
+                status: 'ok',
+                msg: 'Poster updated',
+            });
+        } else {
+            return res.status(400).json({
+                status: 'err',
+                msg: 'Poster could not be updated',
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            status: 'err',
+            msg: 'PUT: POSTER API - server error.',
+        });
+    }
+});
 
 posters.use((_req, res, _next) => {
     return res.status(404).json({ msg: 'Unsupported "Posters" method' });
