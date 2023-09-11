@@ -16,19 +16,6 @@ const ensureAdmin = (req, res, next) => {
     next();
 };
 
-const ensureUser = (req, res, next) => {
-    const { role } = req.user;
-
-    if (role !== 'admin' && role !== 'seller') {
-        return res.status(401).json({
-            status: 'err',
-            msg: 'You are not a user.',
-        });
-    }
-
-    next();
-};
-
 cities.post('/', ensureAdmin, async (req, res) => {
     const { title } = req.body;
 
@@ -79,7 +66,7 @@ cities.post('/', ensureAdmin, async (req, res) => {
     }
 });
 
-cities.get('/', ensureUser, async (_req, res) => {
+cities.get('/', async (_req, res) => {
     try {
         const selectQuery = `SELECT title FROM cities;`;
         const selectRes = await connection.execute(selectQuery);

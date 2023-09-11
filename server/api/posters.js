@@ -13,12 +13,19 @@ posters.post('/', async (req, res) => {
         });
     }
 
-    const { img, profession, title, city, salary } = req.body;
+    const { img, company, profession, title, city, salary } = req.body;
 
     if (!img) {
         return res.status(400).json({
             status: 'err',
             msg: 'Poster could not be created. Provide "image" value.',
+        });
+    }
+
+    if (!company) {
+        return res.status(400).json({
+            status: 'err',
+            msg: 'Poster could not be created. Provide "company" value.',
         });
     }
 
@@ -65,10 +72,10 @@ posters.post('/', async (req, res) => {
         const cityId = cityResArray[0].id;
 
         const insertQuery = `INSERT INTO posters
-            (user_id, img, profession, title, city_id, salary)
-            VALUES (?, ?, ?, ?, ?, ?);`;
+            (user_id, img, company, profession, title, city_id, salary)
+            VALUES (?, ?, ?, ?, ?, ?, ?);`;
         const insertRes = await connection.execute(insertQuery,
-            [id, img, profession, title, cityId, salary]);
+            [id, img, company, profession, title, cityId, salary]);
         const insertResObject = insertRes[0];
 
         if (insertResObject.insertId > 0) {
@@ -91,16 +98,35 @@ posters.post('/', async (req, res) => {
     }
 });
 
-posters.get('/', async (req, res) => {
+posters.get('/home', async (_req, res) => {
+    try {
+        const selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.company, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+                            INNER JOIN cities ON cities.id = posters.city_id;`;
+        const selectRes = await connection.execute(selectQuery);
+        const posters = selectRes[0];
+
+        return res.status(200).json({
+            status: 'ok',
+            list: posters,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'err',
+            msg: 'GET: POSTERS API - server error.',
+        });
+    }
+});
+
+posters.get('/users', async (req, res) => {
     const role = req.user.role;
     let selectQuery = '';
 
     if (role === 'admin') {
-        selectQuery = `SELECT posters.id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+        selectQuery = `SELECT posters.id, posters.img, posters.company, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
                         INNER JOIN cities ON cities.id = posters.city_id;`;
 
     } else if (role === 'seller') {
-        selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+        selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.company, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
                         INNER JOIN cities ON cities.id = posters.city_id WHERE user_id = ?;`;
 
     } else {
@@ -133,11 +159,11 @@ posters.get('/:posterId', async (req, res) => {
     let selectQuery = '';
 
     if (role === 'admin') {
-        selectQuery = `SELECT posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+        selectQuery = `SELECT posters.img, posters.company, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
                         INNER JOIN cities ON cities.id = posters.city_id;`;
 
     } else if (role === 'seller') {
-        selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
+        selectQuery = `SELECT posters.id, posters.company, posters.user_id, posters.img, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
                         INNER JOIN cities ON cities.id = posters.city_id WHERE posters.id = ?;`;
 
     } else {
@@ -192,7 +218,7 @@ posters.get('/:posterId', async (req, res) => {
 posters.put('/:posterId', async (req, res) => {
     const { posterId } = req.params;
     const { role, id } = req.user;
-    const { img, profession, title, city, salary } = req.body;
+    const { img, company, profession, title, city, salary } = req.body;
 
     if (role !== 'seller') {
         return res.status(401).json({
@@ -231,8 +257,8 @@ posters.put('/:posterId', async (req, res) => {
 
         const cityId = cityResArray[0].id;
 
-        const updateQuery = `UPDATE posters SET img = ?, profession = ?, title = ?, city_id = ?, salary = ? WHERE id = ?`;
-        const updateResObject = await connection.execute(updateQuery, [img, profession, title, cityId, salary, posterId]);
+        const updateQuery = `UPDATE posters SET img = ?, company = ?, profession = ?, title = ?, city_id = ?, salary = ? WHERE id = ?`;
+        const updateResObject = await connection.execute(updateQuery, [img, company, profession, title, cityId, salary, posterId]);
 
         if (updateResObject[0].affectedRows > 0) {
             return res.status(200).json({

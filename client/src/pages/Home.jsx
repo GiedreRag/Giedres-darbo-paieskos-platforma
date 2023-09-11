@@ -1,77 +1,87 @@
+import { useContext, useEffect, useState } from "react";
+import { GlobalContext } from "../context/GlobalContext";
 import { Link } from "react-router-dom";
 
 export function Home() {
+    const { cities } = useContext(GlobalContext);
+    const { posters, updatePosters } = useContext(GlobalContext); 
+    const [selectedCity, setSelectedCity] = useState('All');
+    const [profession, setProfession] = useState('');
+
+
+    useEffect(() => {
+        fetch('http://localhost:3001/api/posters/home/', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    updatePosters(data.list);
+                }
+            })
+            .catch(console.error);
+    }, []);
+
+    const imageStyle = {
+        width: 50,
+        height: 50,
+        objectFit: 'container',
+        objectPosition: 'center',
+    }
+
+    const filteredPosters = posters.filter(poster => {
+        const cityMatches = selectedCity === 'All' || poster.city === selectedCity;
+        const professionMatches = profession === '' || poster.profession.toLowerCase().includes(profession.toLowerCase());
+        return cityMatches && professionMatches;
+    });
+
     return (
-        <div className="container px-4 py-5" id="hanging-icons">
-            <h2 className="pb-2 border-bottom">Paskutiniai darbo pasiulymai</h2>
-            <div className="row g-4 py-5 row-cols-1 row-cols-lg-3">
-                <div className="col d-flex align-items-start mb-4">
-                    <div className="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+        <div className="container" >
+            <div className="col-12">
+                <div className="row">
+                    <div className="col-6 col-sm-4 col-md-3">
+                        <select className="form-select" 
+                            onChange={e => setSelectedCity(e.target.value)}>
+                            <option value="All">Visi</option>
+                            {cities.map(c => (
+                                <option key={c} value={c}>{c}</option>
+                            ))}
+                        </select>
                     </div>
-                    <div>
-                    <h3 className="fs-2 text-body-emphasis">Featured title</h3>
-                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                    <Link href="/" className="btn btn-primary">
-                        Primary button
-                    </Link>
-                    </div>
-                </div>
-                <div className="col d-flex align-items-start mb-4">
-                    <div className="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                    </div>
-                    <div>
-                    <h3 className="fs-2 text-body-emphasis">Featured title</h3>
-                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                    <Link href="/" className="btn btn-primary">
-                        Primary button
-                    </Link>
-                    </div>
-                </div>
-                <div className="col d-flex align-items-start mb-4">
-                    <div className="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                    </div>
-                    <div>
-                    <h3 className="fs-2 text-body-emphasis">Featured title</h3>
-                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                    <Link href="/" className="btn btn-primary">
-                        Primary button
-                    </Link>
-                    </div>
-                </div>
-                <div className="col d-flex align-items-start mb-4">
-                    <div className="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                    </div>
-                    <div>
-                    <h3 className="fs-2 text-body-emphasis">Featured title</h3>
-                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                    <Link href="/" className="btn btn-primary">
-                        Primary button
-                    </Link>
-                    </div>
-                </div>
-                <div className="col d-flex align-items-start mb-4">
-                    <div className="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                    </div>
-                    <div>
-                    <h3 className="fs-2 text-body-emphasis">Featured title</h3>
-                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                    <Link href="/" className="btn btn-primary">
-                        Primary button
-                    </Link>
-                    </div>
-                </div>
-                <div className="col d-flex align-items-start">
-                    <div className="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                    </div>
-                    <div>
-                    <h3 className="fs-2 text-body-emphasis">Featured title</h3>
-                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                    <Link href="/" className="btn btn-primary">
-                        Primary button
-                    </Link>
+                    <div className="col-6 col-sm-4 col-md-3">
+                        <input type="text" className="form-control" value={profession} 
+                            onChange={e => setProfession(e.target.value)} />
                     </div>
                 </div>
             </div>
+            <table className="table border-top mt-4">
+                <tbody>
+                    {
+                        filteredPosters
+                        .map((poster, idx) => (
+                            <tr key={poster.title + idx}>
+                                <td>{idx + 1}</td>
+                                <td>
+                                    <img style={imageStyle} src={poster.img} alt="logo" />
+                                </td>
+                                <td>{poster.company}</td>
+                                <td>{poster.profession}</td>
+                                <td>{poster.title}</td>
+                                <td>{poster.city}</td>
+                                <td>{poster.salary} €/men.</td>
+                                <td>
+                                    <Link className="btn btn-outline-primary me-2" to={`/paskyra`}>Daugiau</Link>
+                                    <Link className="btn btn-outline-primary me-2" to={`/paskyra`}>Susisiekti</Link>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
         </div>
-    )
+    );
 }
