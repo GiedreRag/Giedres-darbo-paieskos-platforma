@@ -189,31 +189,40 @@ posters.get('/:posterId', async (req, res) => {
     }
 });
 
-// posters.delete('/:title', async (req, res) => {
-//     const { title } = req.params;
-//     try {
-//         const deleteQuery = `DELETE FROM cities WHERE title = ?;`;
-//         const deleteRes = await connection.execute(deleteQuery, [title]);
-//         const cities = deleteRes[0];
+posters.delete('/:posterId', async (req, res) => {
+    const { posterId } = req.params;
+    const { role } = req.user;
 
-//         if (cities.affectedRows > 0) {
-//             return res.status(200).json({
-//                 status: 'ok',
-//                 msg: 'City deleted.',
-//             });
-//         } else {
-//             return res.status(400).json({
-//                 status: 'err',
-//                 msg: 'City not found, nothing deleted.',
-//             });
-//         }
-//     } catch (error) {
-//         return res.status(500).json({
-//             status: 'err',
-//             msg: 'DELETE: CITIES API - server error.',
-//         });
-//     }
-// });
+    if (role !== 'seller') {
+        return res.status(401).json({
+            status: 'err',
+            msg: 'You are not a seller.',
+        });
+    }
+
+    try {
+        const deleteQuery = `DELETE FROM posters WHERE posters.id = ?;`;
+        const deleteRes = await connection.execute(deleteQuery, [posterId]);
+        const posters = deleteRes[0];
+
+        if (posters.affectedRows > 0) {
+            return res.status(200).json({
+                status: 'ok',
+                msg: 'Poster deleted.',
+            });
+        } else {
+            return res.status(400).json({
+                status: 'err',
+                msg: 'Poster not found, nothing deleted.',
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            status: 'err',
+            msg: 'DELETE: POSTERS API - server error.',
+        });
+    }
+});
 
 posters.put('/:posterId', async (req, res) => {
     const { posterId } = req.params;
