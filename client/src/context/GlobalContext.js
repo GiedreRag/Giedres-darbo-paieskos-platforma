@@ -16,6 +16,7 @@ export const initialContext = {
     deleteCity: () => { },
     posters: [],
     updatePosters: () => { },
+    deletePoster: () => { },
 };
 
 export const GlobalContext = createContext(initialContext);
@@ -105,6 +106,10 @@ export const ContextWrapper = (props) => {
         setPosters(posters);
     }
 
+    function deletePoster(id) {
+        setPosters(prevPosters => prevPosters.filter(poster => poster.id !== id));
+    }
+
     const value = {
         loginStatus,
         updateLoginStatus,
@@ -120,7 +125,8 @@ export const ContextWrapper = (props) => {
         deleteCity,
         changeCity,
         posters,
-        updatePosters
+        updatePosters,
+        deletePoster,
     };
 
     return (
