@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 
-export function PostersTable({ filterCity, filterProfession }) {
+export function PostersTable({ filterCity, filterProfession, role }) {
     const { posters, updatePosters } = useContext(GlobalContext); 
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/posters/', {
+        fetch('http://localhost:3001/api/posters/users/', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -29,20 +29,11 @@ export function PostersTable({ filterCity, filterProfession }) {
         objectPosition: 'center',
     }
 
+    console.log(role);
+
     return (
         <div className="container" >
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Kompanija</th>
-                        <th scope="col">Profesija</th>
-                        <th scope="col">Pavadinimas</th>
-                        <th scope="col">Miestas</th>
-                        <th scope="col">Alga</th>
-                        <th scope="col">Veiksmai</th>
-                    </tr>
-                </thead>
+            <table className="table border-top mt-4">
                 <tbody>
                     {
                         posters
@@ -52,15 +43,17 @@ export function PostersTable({ filterCity, filterProfession }) {
                             <tr key={poster.title + idx}>
                                 <td>{idx + 1}</td>
                                 <td>
-                                    <img style={imageStyle} src={poster.img} alt="Car" />
+                                    <img style={imageStyle} src={poster.img} alt="logo" />
                                 </td>
+                                <td>{poster.company}</td>
                                 <td>{poster.profession}</td>
                                 <td>{poster.title}</td>
                                 <td>{poster.city}</td>
-                                <td>{poster.salary}</td>
+                                <td>{poster.salary} €/men.</td>
                                 <td>
-                                    <Link className="btn btn-outline-primary me-2" to={`/paskyra/skelbimai/${poster.id}/koreguoti`}>Koreguoti</Link>
-                                    {/* <button className="btn btn-danger py-2" onClick={() => deletePosterHandler(poster)} type='button'>Pasalinti</button> */}
+                                    {role === 'admin' && <Link className="btn btn-outline-primary me-2" to={`/paskyra`}>Blokuoti</Link>}
+                                    {role === 'seller' && <Link className="btn btn-outline-primary me-2" to={`/paskyra/skelbimai/${poster.id}/koreguoti`}>Koreguoti</Link>}
+                                    {role === 'seller' && <Link className="btn btn-outline-danger me-2" to={`/paskyra/skelbimai/${poster.id}/koreguoti`}>Istrinti</Link>} 
                                 </td>
                             </tr>
                         ))
