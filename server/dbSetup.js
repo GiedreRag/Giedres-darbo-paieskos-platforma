@@ -111,6 +111,7 @@ async function postersTable(db) {
                         id int(10) NOT NULL AUTO_INCREMENT,
                         user_id int(10) NOT NULL,
                         img varchar(200) NOT NULL,
+                        company varchar(40) NOT NULL,
                         profession varchar(50) NOT NULL,
                         title varchar(60) NOT NULL,
                         city_id int(3) NOT NULL,
@@ -168,10 +169,10 @@ async function generateCities(db) {
 
 async function generatePosters(db) {
     try {
-        const sql = `INSERT INTO posters (user_id, img, profession, title, city_id, salary) VALUES 
-        ('2', 'http://localhost:3001/images/poster/poster_1694267980969.jpg', 'Programuotojas', 'Programuotojo be patirties', '2', '900'), 
-        ('3', 'http://localhost:3001/images/poster/poster_1694268042203.png', 'IT', 'Patyrusio IT specialisto', '1', '2500'), 
-        ('2', 'http://localhost:3001/images/poster/poster_1694268195044.jpg', 'Programuotojas', 'JavaSript specialisto', '2', '3000');`;
+        const sql = `INSERT INTO posters (user_id, img, company, profession, title, city_id, salary) VALUES 
+        ('2', 'http://localhost:3001/images/poster/poster_1694267980969.jpg', 'Panda co.', 'Programuotojas', 'Programuotojo be patirties', '2', '900'), 
+        ('3', 'http://localhost:3001/images/poster/poster_1694268042203.png', 'Penguin co.', 'IT', 'Patyrusio IT specialisto', '1', '2500'), 
+        ('2', 'http://localhost:3001/images/poster/poster_1694268195044.jpg', 'Panda co.', 'Programuotojas', 'JavaSript specialisto', '2', '3000');`;
         await db.execute(sql);
     } catch (error) {
         console.log("Couldn't create posters into a posters' table.");

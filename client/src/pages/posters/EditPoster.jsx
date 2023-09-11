@@ -12,6 +12,8 @@ export function EditPoster() {
     const [poster, setPoster] = useState(null);
     const [img, setImg] = useState('');
     const [imgErr, setImgErr] = useState('');
+    const [company, setCompany] = useState('');
+    const [companyErr, setCompanyErr] = useState('');
     const [profession, setProfession] = useState('');
     const [professionErr, setProfessionErr] = useState('');
     const [title, setTitle] = useState('');
@@ -35,6 +37,7 @@ export function EditPoster() {
                     setPoster(data.poster);
                     const poster = data.poster;
                     setImg(poster.img);
+                    setCompany(poster.company);
                     setProfession(poster.profession);
                     setTitle(poster.title);
                     setCity(poster.city);
@@ -64,6 +67,20 @@ export function EditPoster() {
     function imgValidity() {
         if (img === '') {
             return 'Reikalinga nuotrauka.';
+        }
+
+        return '';
+    }
+
+    function companyValidity() {
+        const maxSize = 40;
+
+        if (company === '') {
+            return 'Reikalingas pavadinimas.';
+        }
+
+        if (company.length > maxSize) {
+            return `Per ilgas pavadinimas. Max leidziama ${maxSize} simboliai.`;
         }
 
         return '';
@@ -124,6 +141,9 @@ export function EditPoster() {
         const imgMsg = imgValidity();
         setImgErr(imgMsg);
 
+        const companyMsg = companyValidity();
+        setCompanyErr(companyMsg);
+
         const professionMsg = professionValidity();
         setProfessionErr(professionMsg);
 
@@ -136,7 +156,7 @@ export function EditPoster() {
         const salaryMsg = salaryValidity();
         setSalaryErr(salaryMsg);
 
-        return !imgMsg && !professionMsg && !titleMsg && !cityMsg && !salaryMsg;
+        return !imgMsg && !professionMsg && !companyMsg && !titleMsg && !cityMsg && !salaryMsg;
     }
 
     function submitHandler(e) {
@@ -154,7 +174,7 @@ export function EditPoster() {
             },
             credentials: 'include',
             body: JSON.stringify({
-                img, profession, title, city, salary
+                img, company, profession, title, city, salary
             }),
         })
             .then(res => res.json())
@@ -194,6 +214,14 @@ export function EditPoster() {
                             <input onChange={updateImg} type="file"
                                 className={`form-control ${imgErr ? 'is-invalid' : ''}`} id="image" />
                             <div className="invalid-feedback">{imgErr}</div>
+                        </div>
+                    </div>
+                    <div className="row mb-3">
+                        <label className="col-12 col-md-4 form-label" htmlFor="title">Kompanija</label>
+                        <div className="col-12 col-md-8">
+                            <input onChange={e => setCompany(e.target.value)} value={company} type="text"
+                                className={`form-control ${companyErr ? 'is-invalid' : ''}`} id="company" />
+                            <div className="invalid-feedback">{companyErr}</div>
                         </div>
                     </div>
                     <div className="row mb-3">
