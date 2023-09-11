@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 
 export function AdminPosters() {
-    const { cities } = useContext(GlobalContext);
+    const { cities, role } = useContext(GlobalContext);
     const [selectedCity, setSelectedCity] = useState('All');
     const [profession, setProfession] = useState('');
 
@@ -28,7 +28,7 @@ export function AdminPosters() {
                 </div>
             </div>
             <div className="col-12">
-                <PostersTable filterCity={selectedCity} filterProfession={profession.toLowerCase()}/>
+                <PostersTable role={role} filterCity={selectedCity} filterProfession={profession.toLowerCase()}/>
             </div>
         </div>
     );
