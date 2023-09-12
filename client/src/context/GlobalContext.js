@@ -27,7 +27,7 @@ export const ContextWrapper = (props) => {
     const [fullname, setFullname] = useState(initialContext.fullname);
     const [email, setEmail] = useState(initialContext.email);
     const [cities, setCities] = useState(initialContext.cities);
-    const [posters, setPosters] = useState(initialContext.cities);
+    const [posters, setPosters] = useState(initialContext.posters);
 
     useEffect(() => {
         fetch('http://localhost:3001/api/login', {

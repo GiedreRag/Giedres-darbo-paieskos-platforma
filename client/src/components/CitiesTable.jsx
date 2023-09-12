@@ -6,6 +6,10 @@ export function CitiesTable() {
     const { cities, deleteCity } = useContext(GlobalContext); 
 
     function deleteCityHandler(title) {
+        const isConfirmed = window.confirm("Ar tikrai norite pasalinti si miesta?");
+    
+        if (!isConfirmed) return;
+
         fetch('http://localhost:3001/api/cities/' + title, {
             method: 'DELETE',
             headers: {

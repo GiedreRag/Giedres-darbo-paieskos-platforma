@@ -15,6 +15,7 @@ import { Users } from './pages/users/Users';
 import { Posters } from './pages/posters/Posters';
 import { AddPoster } from './pages/posters/AddPoster';
 import { EditPoster } from './pages/posters/EditPoster';
+import { AllPostersPublic } from './pages/AllPostersPublic';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route Component={PublicLayout}>
             <Route index path='/' element={<Home />}></Route>
+            <Route index path='/visi-skelbimai' element={<AllPostersPublic />}></Route>
             <Route path='/registracija' element={<Register />}></Route>
             <Route path='/prisijungimas' element={<Login />}></Route>
           </Route>

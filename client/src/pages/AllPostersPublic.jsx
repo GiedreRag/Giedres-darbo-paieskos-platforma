@@ -2,14 +2,14 @@ import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { PostersTablePublic } from "../components/PostersTablePublic";
 
-export function Home() {
+export function AllPostersPublic() {
     const { cities } = useContext(GlobalContext);
     const [selectedCity, setSelectedCity] = useState('All');
     const [profession, setProfession] = useState('');
 
     return (
         <div className="container" >
-            <h3>Skelbimai</h3>
+            <h3>Visi skelbimai</h3>
             <div className="col-12">
                 <div className="row">
                     <div className="col-6 col-sm-4 col-md-3">
@@ -28,7 +28,7 @@ export function Home() {
                 </div>
             </div>
             <div className="col-12">
-                <PostersTablePublic filterCity={selectedCity} filterProfession={profession.toLowerCase()} limit={6}/>
+                <PostersTablePublic filterCity={selectedCity} filterProfession={profession.toLowerCase()} limit={1000}/>
             </div>
         </div>
     );
