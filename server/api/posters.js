@@ -98,11 +98,12 @@ posters.post('/', async (req, res) => {
     }
 });
 
-posters.get('/home', async (_req, res) => {
+posters.get('/', async (req, res) => {
     try {
-        const selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.company, posters.profession, posters.title, cities.title as city, posters.salary FROM posters 
-                            INNER JOIN cities ON cities.id = posters.city_id;`;
-        const selectRes = await connection.execute(selectQuery);
+        const limit = req.query.limit ? parseInt(req.query.limit) : 6;
+        const selectQuery = `SELECT posters.id, posters.user_id, posters.img, posters.company, posters.profession,  posters.title, cities.title as city, posters.salary FROM posters 
+                            INNER JOIN cities ON cities.id = posters.city_id ORDER BY posters.id DESC LIMIT ?;`;
+        const selectRes = await connection.execute(selectQuery, [limit]);
         const posters = selectRes[0];
 
         return res.status(200).json({
