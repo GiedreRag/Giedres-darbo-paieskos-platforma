@@ -9,7 +9,7 @@ logout.get('/', async (req, res) => {
     if (!userToken) {
         return res.status(200).json({
             status: 'ok',
-            msg: 'You are already log out.',
+            msg: 'You are already loged out.',
         });
     }
 
@@ -33,7 +33,7 @@ logout.get('/', async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             status: 'err',
-            msg: 'POST: LOGIN API - server error.',
+            msg: 'GET: LOGOUT API - server error.',
         });
     }
 });

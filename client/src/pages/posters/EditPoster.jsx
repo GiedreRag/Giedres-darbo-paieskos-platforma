@@ -243,7 +243,7 @@ export function EditPoster() {
                         </div>
                     </div>
                     <div className="row mb-3">
-                        <label className="col-12 col-md-4 form-label" htmlFor="carType">Miestas</label>
+                        <label className="col-12 col-md-4 form-label" htmlFor="city">Miestas</label>
                         <div className="col-12 col-md-8">
                             <select className={`form-select ${cityErr ? 'is-invalid' : ''}`}
                                 onChange={e => setCity(e.target.value)} value={city} id="city">

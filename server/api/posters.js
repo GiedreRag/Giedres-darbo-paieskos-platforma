@@ -93,7 +93,7 @@ posters.post('/', async (req, res) => {
         console.log(error);
         return res.status(500).json({
             status: 'err',
-            msg: 'POST: POSTER - server error.',
+            msg: 'POST: POSTER API - server error.',
         });
     }
 });

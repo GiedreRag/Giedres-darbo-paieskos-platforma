@@ -25,7 +25,7 @@ function App() {
         <Routes>
           <Route Component={PublicLayout}>
             <Route index path='/' element={<Home />}></Route>
-            <Route index path='/visi-skelbimai' element={<AllPostersPublic />}></Route>
+            <Route path='/visi-skelbimai' element={<AllPostersPublic />}></Route>
             <Route path='/registracija' element={<Register />}></Route>
             <Route path='/prisijungimas' element={<Login />}></Route>
           </Route>
